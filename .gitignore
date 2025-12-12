@@ -1,8 +1,6 @@
-# Build directories
 build/
 cmake-build-*/
 
-# Compiled files
 *.o
 *.obj
 *.exe
@@ -12,7 +10,6 @@ cmake-build-*/
 *.a
 *.lib
 
-# CMake files
 CMakeCache.txt
 CMakeFiles/
 CMakeScripts/
@@ -26,7 +23,6 @@ _deps/
 *.ninja
 *.ninja_log
 
-# Database files
 *.db
 *.db-journal
 *.db-wal
@@ -34,14 +30,12 @@ _deps/
 *.sqlite
 *.sqlite3
 
-# Generated files
 *_autogen/
 moc_*.cpp
 moc_*.h
 ui_*.h
 qrc_*.cpp
 
-# IDE files
 .vscode/
 .idea/
 *.user
@@ -51,10 +45,8 @@ qrc_*.cpp
 *.vcxproj*
 *.xcodeproj/
 
-# Covers directory
 covers/
 
-# OS files
 .DS_Store
 Thumbs.db
 *.swp

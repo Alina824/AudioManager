@@ -16,4 +16,8 @@ clean:
 rebuild: clean build
 
 run: build
+<<<<<<< HEAD
 	@cd $(BUILD_DIR) && ./$(EXE_FILE)
+=======
+	@cd $(BUILD_DIR) && ./$(EXE_FILE)
+>>>>>>> 323cbcb4200d118c7c3df4c1a86de438b491d332
