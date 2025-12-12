@@ -35,10 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
     setupToolBar();
     setupStatusBar();
     setupConnections();
-    
     loadPlaylists();
     loadTracks();
-    
     setWindowTitle("Аудио Плеер");
     resize(1200, 800);
 }
@@ -51,22 +49,17 @@ void MainWindow::setupUI()
 {
     m_centralWidget = new QWidget(this);
     setCentralWidget(m_centralWidget);
-    
     QVBoxLayout *mainLayout = new QVBoxLayout(m_centralWidget);
     mainLayout->setContentsMargins(5, 5, 5, 5);
     mainLayout->setSpacing(5);
-    
     m_mainSplitter = new QSplitter(Qt::Horizontal, this);
-    
     m_leftPanel = new QWidget(this);
     QVBoxLayout *leftLayout = new QVBoxLayout(m_leftPanel);
     leftLayout->setContentsMargins(0, 0, 0, 0);
     
     m_leftTabs = new QTabWidget(this);
-    
     QWidget *playlistTab = new QWidget(this);
     QVBoxLayout *playlistTabLayout = new QVBoxLayout(playlistTab);
-    
     QHBoxLayout *playlistControlsLayout = new QHBoxLayout();
     m_playlistCombo = new QComboBox(this);
     m_createPlaylistBtn = new QPushButton("+", this);
@@ -80,10 +73,8 @@ void MainWindow::setupUI()
     m_playlistTree = new QTreeView(this);
     m_playlistTree->setHeaderHidden(true);
     m_playlistTree->setRootIsDecorated(false);
-    
     playlistTabLayout->addLayout(playlistControlsLayout);
     playlistTabLayout->addWidget(m_playlistTree);
-    
     m_leftTabs->addTab(playlistTab, "Плейлисты");
     
     QWidget *historyTab = new QWidget(this);
@@ -97,16 +88,13 @@ void MainWindow::setupUI()
         m_dbManager->clearHistory();
         loadHistory();
     });
-    
     m_leftTabs->addTab(historyTab, "История");
     
     leftLayout->addWidget(m_leftTabs);
     m_leftPanel->setMaximumWidth(250);
-    
     m_centerPanel = new QWidget(this);
     QVBoxLayout *centerLayout = new QVBoxLayout(m_centerPanel);
     centerLayout->setContentsMargins(0, 0, 0, 0);
-    
     QHBoxLayout *searchLayout = new QHBoxLayout();
     m_searchEdit = new QLineEdit(this);
     m_searchEdit->setPlaceholderText("Поиск треков...");
@@ -132,14 +120,12 @@ void MainWindow::setupUI()
     filterLayout->addWidget(m_clearFiltersBtn);
     filterLayout->addWidget(m_addToPlaylistBtn);
     filterLayout->addStretch();
-    
     m_trackList = new QListView(this);
     m_trackList->setModel(m_playlistModel);
     
     centerLayout->addLayout(searchLayout);
     centerLayout->addLayout(filterLayout);
     centerLayout->addWidget(m_trackList);
-    
     m_rightPanel = new QWidget(this);
     QVBoxLayout *rightLayout = new QVBoxLayout(m_rightPanel);
     rightLayout->setContentsMargins(0, 0, 0, 0);
@@ -151,11 +137,9 @@ void MainWindow::setupUI()
     m_albumCoverLabel->setStyleSheet("border: 1px solid gray; background-color: #2b2b2b;");
     m_albumCoverLabel->setText("Нет обложки");
     m_albumCoverLabel->setScaledContents(false);
-    
     m_trackInfoLabel = new QLabel("Трек не выбран", this);
     m_trackInfoLabel->setAlignment(Qt::AlignCenter);
     m_trackInfoLabel->setWordWrap(true);
-    
     rightLayout->addWidget(m_albumCoverLabel);
     rightLayout->addWidget(m_trackInfoLabel);
     rightLayout->addStretch();
@@ -171,7 +155,6 @@ void MainWindow::setupUI()
     m_controlsPanel = new QWidget(this);
     QVBoxLayout *controlsLayout = new QVBoxLayout(m_controlsPanel);
     controlsLayout->setContentsMargins(5, 5, 5, 5);
-    
     QHBoxLayout *positionLayout = new QHBoxLayout();
     m_positionSlider = new QSlider(Qt::Horizontal, this);
     m_timeLabel = new QLabel("00:00 / 00:00", this);
@@ -186,7 +169,6 @@ void MainWindow::setupUI()
     m_nextBtn = new QPushButton("Следующий", this);
     m_shuffleBtn = new QPushButton("Рандомный выбор следующего", this);
     m_repeatBtn = new QPushButton("Повтор", this);
-    
     m_volumeLabel = new QLabel("Громкость", this);
     m_volumeSlider = new QSlider(Qt::Horizontal, this);
     m_volumeSlider->setRange(0, 100);
@@ -207,7 +189,6 @@ void MainWindow::setupUI()
     controlsLayout->addLayout(positionLayout);
     controlsLayout->addLayout(buttonsLayout);
     m_controlsPanel->setMaximumHeight(120);
-    
     mainLayout->addWidget(m_mainSplitter);
     mainLayout->addWidget(m_controlsPanel);
 }
@@ -254,7 +235,6 @@ void MainWindow::setupConnections()
     connect(m_playlistCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), 
             this, &MainWindow::onPlaylistSelected);
     connect(m_addToPlaylistBtn, &QPushButton::clicked, this, &MainWindow::onAddToPlaylist);
-    
     connect(m_playPauseBtn, &QPushButton::clicked, this, &MainWindow::onPlayPause);
     connect(m_stopBtn, &QPushButton::clicked, this, &MainWindow::onStop);
     connect(m_previousBtn, &QPushButton::clicked, this, &MainWindow::onPrevious);
