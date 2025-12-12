@@ -1,0 +1,62 @@
+# Build directories
+build/
+cmake-build-*/
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+*.cmake
+!CMakeLists.txt
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+*.ninja
+*.ninja_log
+
+# Database files
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Generated files
+*_autogen/
+moc_*.cpp
+moc_*.h
+ui_*.h
+qrc_*.cpp
+
+# IDE files
+.vscode/
+.idea/
+*.user
+*.pro.user
+*.suo
+*.sln
+*.vcxproj*
+*.xcodeproj/
+
+# Covers directory
+covers/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
