@@ -37,7 +37,6 @@ void AudioPlayer::setTrack(const TrackInfo &track)
     if (track.id < 0) {
         return;
     }
-    
     stop();
     m_currentTrack = track;
     m_trackLoaded = false;
@@ -47,7 +46,6 @@ void AudioPlayer::setTrack(const TrackInfo &track)
         emit errorOccurred(QString("Файл не найден: %1").arg(track.filePath));
         return;
     }
-    
     QUrl url = QUrl::fromLocalFile(track.filePath);
     m_player->setSource(url);
     
@@ -110,7 +108,6 @@ void AudioPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
         m_trackLoaded = true;
         extractMetadata(m_player->source());
         emit durationChanged(m_player->duration());
-        
         if (m_autoPlay) {
             m_autoPlay = false;
             m_player->play();
@@ -191,7 +188,6 @@ void AudioPlayer::extractMetadata(const QUrl &url)
     }
     
     m_dbManager->updateTrackInfo(m_currentTrack.id, title, artist, album, duration, coverPath);
-    
     m_currentTrack = m_dbManager->getTrack(m_currentTrack.id);
     emit trackChanged(m_currentTrack);
 }

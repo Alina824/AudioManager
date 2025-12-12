@@ -51,22 +51,17 @@ void MainWindow::setupUI()
 {
     m_centralWidget = new QWidget(this);
     setCentralWidget(m_centralWidget);
-    
     QVBoxLayout *mainLayout = new QVBoxLayout(m_centralWidget);
     mainLayout->setContentsMargins(5, 5, 5, 5);
     mainLayout->setSpacing(5);
-    
     m_mainSplitter = new QSplitter(Qt::Horizontal, this);
-    
     m_leftPanel = new QWidget(this);
     QVBoxLayout *leftLayout = new QVBoxLayout(m_leftPanel);
     leftLayout->setContentsMargins(0, 0, 0, 0);
-    
     m_leftTabs = new QTabWidget(this);
     
     QWidget *playlistTab = new QWidget(this);
     QVBoxLayout *playlistTabLayout = new QVBoxLayout(playlistTab);
-    
     QHBoxLayout *playlistControlsLayout = new QHBoxLayout();
     m_playlistCombo = new QComboBox(this);
     m_createPlaylistBtn = new QPushButton("+", this);
@@ -80,10 +75,8 @@ void MainWindow::setupUI()
     m_playlistTree = new QTreeView(this);
     m_playlistTree->setHeaderHidden(true);
     m_playlistTree->setRootIsDecorated(false);
-    
     playlistTabLayout->addLayout(playlistControlsLayout);
     playlistTabLayout->addWidget(m_playlistTree);
-    
     m_leftTabs->addTab(playlistTab, "Плейлисты");
     
     QWidget *historyTab = new QWidget(this);
@@ -99,10 +92,8 @@ void MainWindow::setupUI()
     });
     
     m_leftTabs->addTab(historyTab, "История");
-    
     leftLayout->addWidget(m_leftTabs);
     m_leftPanel->setMaximumWidth(250);
-    
     m_centerPanel = new QWidget(this);
     QVBoxLayout *centerLayout = new QVBoxLayout(m_centerPanel);
     centerLayout->setContentsMargins(0, 0, 0, 0);
@@ -132,10 +123,8 @@ void MainWindow::setupUI()
     filterLayout->addWidget(m_clearFiltersBtn);
     filterLayout->addWidget(m_addToPlaylistBtn);
     filterLayout->addStretch();
-    
     m_trackList = new QListView(this);
     m_trackList->setModel(m_playlistModel);
-    
     centerLayout->addLayout(searchLayout);
     centerLayout->addLayout(filterLayout);
     centerLayout->addWidget(m_trackList);
@@ -143,7 +132,6 @@ void MainWindow::setupUI()
     m_rightPanel = new QWidget(this);
     QVBoxLayout *rightLayout = new QVBoxLayout(m_rightPanel);
     rightLayout->setContentsMargins(0, 0, 0, 0);
-    
     m_albumCoverLabel = new QLabel(this);
     m_albumCoverLabel->setAlignment(Qt::AlignCenter);
     m_albumCoverLabel->setMinimumSize(200, 200);
@@ -155,7 +143,6 @@ void MainWindow::setupUI()
     m_trackInfoLabel = new QLabel("Трек не выбран", this);
     m_trackInfoLabel->setAlignment(Qt::AlignCenter);
     m_trackInfoLabel->setWordWrap(true);
-    
     rightLayout->addWidget(m_albumCoverLabel);
     rightLayout->addWidget(m_trackInfoLabel);
     rightLayout->addStretch();
@@ -167,7 +154,6 @@ void MainWindow::setupUI()
     m_mainSplitter->setStretchFactor(0, 0);
     m_mainSplitter->setStretchFactor(1, 2);
     m_mainSplitter->setStretchFactor(2, 0);
-    
     m_controlsPanel = new QWidget(this);
     QVBoxLayout *controlsLayout = new QVBoxLayout(m_controlsPanel);
     controlsLayout->setContentsMargins(5, 5, 5, 5);
@@ -178,7 +164,6 @@ void MainWindow::setupUI()
     m_timeLabel->setMinimumWidth(100);
     positionLayout->addWidget(m_positionSlider);
     positionLayout->addWidget(m_timeLabel);
-    
     QHBoxLayout *buttonsLayout = new QHBoxLayout();
     m_previousBtn = new QPushButton("Предыдущий", this);
     m_playPauseBtn = new QPushButton("Воспроизведение", this);
@@ -191,7 +176,6 @@ void MainWindow::setupUI()
     m_volumeSlider = new QSlider(Qt::Horizontal, this);
     m_volumeSlider->setRange(0, 100);
     m_volumeSlider->setValue(50);
-    
     buttonsLayout->addWidget(m_previousBtn);
     buttonsLayout->addWidget(m_playPauseBtn);
     buttonsLayout->addWidget(m_stopBtn);
@@ -207,7 +191,6 @@ void MainWindow::setupUI()
     controlsLayout->addLayout(positionLayout);
     controlsLayout->addLayout(buttonsLayout);
     m_controlsPanel->setMaximumHeight(120);
-    
     mainLayout->addWidget(m_mainSplitter);
     mainLayout->addWidget(m_controlsPanel);
 }
@@ -221,7 +204,6 @@ void MainWindow::setupMenuBar()
     fileMenu->addSeparator();
     m_exitAction = fileMenu->addAction("Выход");
     m_exitAction->setShortcut(QKeySequence::Quit);
-    
     QMenu *viewMenu = menuBar()->addMenu("Вид");
     m_showHistoryAction = viewMenu->addAction("Показать историю");
     m_showHistoryAction->setCheckable(true);
@@ -397,26 +379,21 @@ void MainWindow::onAddFiles()
     if (files.isEmpty()) {
         return;
     }
-    
     int added = 0;
     int converted = 0;
-    
     QProgressDialog progress("Обработка файлов...", "Отмена", 0, files.size(), this);
     progress.setWindowModality(Qt::WindowModal);
     progress.show();
-    
     for (int i = 0; i < files.size(); ++i) {
         const QString &file = files[i];
         progress.setValue(i);
         progress.setLabelText(QString("Обработка: %1").arg(QFileInfo(file).fileName()));
-        
         QApplication::processEvents();
         if (progress.wasCanceled()) {
             break;
         }
         
         QString fileToAdd = file;
-        
         if (file.endsWith(".mp4", Qt::CaseInsensitive) || file.endsWith(".m4v", Qt::CaseInsensitive)) {
             QString mp3Path = convertMp4ToMp3(file);
             if (!mp3Path.isEmpty()) {
@@ -427,7 +404,6 @@ void MainWindow::onAddFiles()
                 continue;
             }
         }
-        
         int trackId = m_dbManager->addTrack(fileToAdd);
         if (trackId >= 0) {
             added++;
@@ -435,7 +411,6 @@ void MainWindow::onAddFiles()
     }
     
     progress.setValue(files.size());
-    
     QString message = QString("Добавлено файлов: %1").arg(added);
     if (converted > 0) {
         message += QString(", конвертировано: %1").arg(converted);
@@ -447,7 +422,6 @@ void MainWindow::onAddFiles()
 void MainWindow::onAddFolder()
 {
     QString folder = QFileDialog::getExistingDirectory(this, "Добавить папку");
-    
     if (folder.isEmpty()) {
         return;
     }
@@ -455,19 +429,16 @@ void MainWindow::onAddFolder()
     QDir dir(folder);
     QStringList filters = {"*.mp3", "*.wav", "*.flac", "*.ogg", "*.m4a", "*.aac", "*.wma", "*.mp4", "*.m4v"};
     QStringList files = dir.entryList(filters, QDir::Files);
-    
     int added = 0;
     int converted = 0;
     
     QProgressDialog progress("Обработка файлов...", "Отмена", 0, files.size(), this);
     progress.setWindowModality(Qt::WindowModal);
     progress.show();
-    
     for (int i = 0; i < files.size(); ++i) {
         const QString &file = files[i];
         progress.setValue(i);
         progress.setLabelText(QString("Обработка: %1").arg(file));
-        
         QApplication::processEvents();
         if (progress.wasCanceled()) {
             break;
@@ -475,7 +446,6 @@ void MainWindow::onAddFolder()
         
         QString filePath = dir.absoluteFilePath(file);
         QString fileToAdd = filePath;
-        
         if (file.endsWith(".mp4", Qt::CaseInsensitive) || file.endsWith(".m4v", Qt::CaseInsensitive)) {
             QString mp3Path = convertMp4ToMp3(filePath);
             if (!mp3Path.isEmpty()) {
@@ -493,7 +463,6 @@ void MainWindow::onAddFolder()
     }
     
     progress.setValue(files.size());
-    
     QString message = QString("Добавлено файлов из папки: %1").arg(added);
     if (converted > 0) {
         message += QString(", конвертировано: %1").arg(converted);
@@ -547,7 +516,6 @@ void MainWindow::onPrevious()
     if (m_playlistModel->trackCount() == 0) {
         return;
     }
-    
     if (m_shuffleEnabled) {
         m_currentTrackIndex = QRandomGenerator::global()->bounded(m_playlistModel->trackCount());
     } else {
@@ -569,7 +537,6 @@ void MainWindow::onNext()
     if (m_playlistModel->trackCount() == 0) {
         return;
     }
-    
     if (m_shuffleEnabled) {
         m_currentTrackIndex = QRandomGenerator::global()->bounded(m_playlistModel->trackCount());
     } else {
@@ -637,7 +604,6 @@ void MainWindow::onDurationChanged(qint64 duration)
 void MainWindow::onStateChanged(QMediaPlayer::PlaybackState state)
 {
     updatePlayButton();
-    
     if (state == QMediaPlayer::PlayingState) {
         TrackInfo track = m_audioPlayer->currentTrack();
         if (track.id >= 0) {
@@ -669,7 +635,6 @@ void MainWindow::onStateChanged(QMediaPlayer::PlaybackState state)
 void MainWindow::onTrackChanged(const TrackInfo &track)
 {
     updateAlbumCover();
-    
     QString info = QString("<b>%1</b><br>%2<br>%3")
                    .arg(track.title.isEmpty() ? QFileInfo(track.filePath).baseName() : track.title)
                    .arg(track.artist.isEmpty() ? "Неизвестный исполнитель" : track.artist)
@@ -725,7 +690,6 @@ void MainWindow::onDeletePlaylist()
     if (m_currentPlaylistId < 0) {
         return;
     }
-    
     int ret = QMessageBox::question(this, "Удалить плейлист", 
                                      "Вы уверены, что хотите удалить этот плейлист?",
                                      QMessageBox::Yes | QMessageBox::No);
@@ -771,13 +735,11 @@ void MainWindow::onAddToPlaylist()
     if (track.id < 0) {
         return;
     }
-    
     QList<PlaylistInfo> playlists = m_dbManager->getAllPlaylists();
     if (playlists.isEmpty()) {
         QMessageBox::information(this, "Нет плейлистов", "Сначала создайте плейлист.");
         return;
     }
-    
     QStringList playlistNames;
     for (const PlaylistInfo &playlist : playlists) {
         playlistNames << playlist.name;
@@ -789,7 +751,6 @@ void MainWindow::onAddToPlaylist()
     if (!ok || playlistName.isEmpty()) {
         return;
     }
-    
     int playlistId = -1;
     for (const PlaylistInfo &playlist : playlists) {
         if (playlist.name == playlistName) {
@@ -797,7 +758,6 @@ void MainWindow::onAddToPlaylist()
             break;
         }
     }
-    
     if (playlistId >= 0) {
         if (m_dbManager->addTrackToPlaylist(playlistId, track.id)) {
             statusBar()->showMessage(QString("Добавлено '%1' в плейлист '%2'")
@@ -812,7 +772,6 @@ void MainWindow::onRemoveFromPlaylist()
     if (m_currentPlaylistId < 0) {
         return;
     }
-    
     QModelIndex index = m_trackList->currentIndex();
     if (!index.isValid()) {
         return;
@@ -822,7 +781,6 @@ void MainWindow::onRemoveFromPlaylist()
     if (track.id < 0) {
         return;
     }
-    
     if (m_dbManager->removeTrackFromPlaylist(m_currentPlaylistId, track.id)) {
         m_playlistModel->removeTrack(index.row());
         statusBar()->showMessage("Трек удалён из плейлиста", 2000);
@@ -835,7 +793,6 @@ void MainWindow::onLoadCoverImage()
     if (!index.isValid()) {
         return;
     }
-    
     TrackInfo track = m_playlistModel->trackAt(index.row());
     if (track.id < 0) {
         return;
@@ -846,7 +803,6 @@ void MainWindow::onLoadCoverImage()
     if (fileName.isEmpty()) {
         return;
     }
-    
     QString coversDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/covers";
     QDir().mkpath(coversDir);
     
@@ -858,7 +814,6 @@ void MainWindow::onLoadCoverImage()
         QMessageBox::warning(this, "Ошибка", "Не удалось загрузить изображение.");
         return;
     }
-    
     if (!pixmap.save(coverPath, "JPG")) {
         QMessageBox::warning(this, "Ошибка", "Не удалось сохранить обложку.");
         return;
@@ -869,16 +824,13 @@ void MainWindow::onLoadCoverImage()
                                  fullTrack.album, fullTrack.duration, coverPath);
     
     TrackInfo updatedTrack = m_dbManager->getTrack(track.id);
-    
     TrackInfo currentTrack = m_audioPlayer->currentTrack();
     if (currentTrack.id == track.id) {
         m_audioPlayer->setTrack(updatedTrack);
     }
     
     loadTracks();
-    
     updateAlbumCoverForTrack(updatedTrack);
-    
     statusBar()->showMessage("Обложка загружена", 2000);
 }
 
@@ -888,7 +840,6 @@ void MainWindow::onDeleteTrack()
     if (!index.isValid()) {
         return;
     }
-    
     TrackInfo track = m_playlistModel->trackAt(index.row());
     if (track.id < 0) {
         return;
@@ -900,7 +851,6 @@ void MainWindow::onDeleteTrack()
                                            QFileInfo(track.filePath).baseName() : track.title),
                                     QMessageBox::Yes | QMessageBox::No,
                                     QMessageBox::No);
-    
     if (ret == QMessageBox::Yes) {
         if (m_dbManager->deleteTrack(track.id)) {
             loadTracks();
@@ -917,31 +867,26 @@ void MainWindow::onAddArtist()
     if (!index.isValid()) {
         return;
     }
-    
     TrackInfo track = m_playlistModel->trackAt(index.row());
     if (track.id < 0) {
         return;
     }
     
     QStringList allArtists;
-    
     for (int i = 1; i < m_artistFilter->count(); ++i) {
         QString artist = m_artistFilter->itemText(i);
         if (!artist.isEmpty()) {
             allArtists << artist;
         }
     }
-    
     if (allArtists.isEmpty()) {
         allArtists = m_dbManager->getAllArtists();
-        
         QList<TrackInfo> tracks;
         if (m_currentPlaylistId >= 0) {
             tracks = m_dbManager->getPlaylistTracks(m_currentPlaylistId);
         } else {
             tracks = m_dbManager->getAllTracks();
-        }
-        
+        } 
         for (const TrackInfo &t : tracks) {
             if (!t.artist.isEmpty()) {
                 QStringList trackArtists = t.artist.split(", ");
@@ -956,7 +901,6 @@ void MainWindow::onAddArtist()
     }
     
     allArtists.sort();
-    
     bool ok;
     QString artistName;
     
@@ -966,11 +910,9 @@ void MainWindow::onAddArtist()
                                           QLineEdit::Normal, "", &ok);
     } else {
         allArtists << "Другое...";
-        
         artistName = QInputDialog::getItem(this, "Добавить исполнителя", 
                                           "Выберите исполнителя:",
                                           allArtists, 0, false, &ok);
-        
         if (ok && artistName == "Другое...") {
             artistName = QInputDialog::getText(this, "Добавить исполнителя", 
                                               "Введите имя исполнителя:",
@@ -995,7 +937,6 @@ void MainWindow::onRemoveArtist()
     if (!index.isValid()) {
         return;
     }
-    
     TrackInfo track = m_playlistModel->trackAt(index.row());
     if (track.id < 0 || track.artist.isEmpty()) {
         QMessageBox::information(this, "Нет исполнителей", "У этого трека нет исполнителей.");
@@ -1004,7 +945,6 @@ void MainWindow::onRemoveArtist()
     
     TrackInfo fullTrack = m_dbManager->getTrack(track.id);
     QStringList artists = fullTrack.artist.split(", ");
-    
     if (artists.isEmpty()) {
         QMessageBox::information(this, "Нет исполнителей", "У этого трека нет исполнителей.");
         return;
@@ -1030,7 +970,6 @@ void MainWindow::onAddAlbum()
     if (!index.isValid()) {
         return;
     }
-    
     TrackInfo track = m_playlistModel->trackAt(index.row());
     if (track.id < 0) {
         return;
@@ -1039,7 +978,6 @@ void MainWindow::onAddAlbum()
     TrackInfo fullTrack = m_dbManager->getTrack(track.id);
     QStringList suggestedAlbums;
     QStringList otherAlbums;
-    
     if (!fullTrack.artist.isEmpty()) {
         QStringList artists = fullTrack.artist.split(", ");
         for (const QString &artistName : artists) {
@@ -1064,20 +1002,17 @@ void MainWindow::onAddAlbum()
     
     suggestedAlbums.sort();
     otherAlbums.sort();
-    
     QStringList finalAlbums = suggestedAlbums;
     finalAlbums << otherAlbums;
     
     bool ok;
     QString albumName;
-    
     if (finalAlbums.isEmpty()) {
         albumName = QInputDialog::getText(this, "Добавить альбом", 
                                          "Введите название альбома:",
                                          QLineEdit::Normal, "", &ok);
     } else {
         finalAlbums << "Другое...";
-        
         albumName = QInputDialog::getItem(this, "Добавить альбом", 
                                           "Выберите альбом:",
                                           finalAlbums, 0, false, &ok);
@@ -1106,7 +1041,6 @@ void MainWindow::onRemoveAlbum()
     if (!index.isValid()) {
         return;
     }
-    
     TrackInfo track = m_playlistModel->trackAt(index.row());
     if (track.id < 0 || track.album.isEmpty()) {
         QMessageBox::information(this, "Нет альбомов", "У этого трека нет альбомов.");
@@ -1115,7 +1049,6 @@ void MainWindow::onRemoveAlbum()
     
     TrackInfo fullTrack = m_dbManager->getTrack(track.id);
     QStringList albums = fullTrack.album.split(", ");
-    
     if (albums.isEmpty()) {
         QMessageBox::information(this, "Нет альбомов", "У этого трека нет альбомов.");
         return;
@@ -1190,7 +1123,6 @@ void MainWindow::updateAlbumCoverForTrack(const TrackInfo &track)
         m_albumCoverLabel->setPixmap(QPixmap());
         return;
     }
-    
     TrackInfo dbTrack = m_dbManager->getTrack(track.id);
     
     if (!dbTrack.coverPath.isEmpty()) {
@@ -1242,7 +1174,6 @@ void MainWindow::loadPlaylists()
 {
     m_playlistCombo->clear();
     m_playlistCombo->addItem("Все треки");
-    
     QList<PlaylistInfo> playlists = m_dbManager->getAllPlaylists();
     for (const PlaylistInfo &playlist : playlists) {
         m_playlistCombo->addItem(playlist.name);
@@ -1252,7 +1183,6 @@ void MainWindow::loadPlaylists()
 void MainWindow::loadTracks()
 {
     QList<TrackInfo> tracks;
-    
     if (m_currentPlaylistId >= 0) {
         tracks = m_dbManager->getPlaylistTracks(m_currentPlaylistId);
     } else {
@@ -1275,7 +1205,6 @@ void MainWindow::loadTracks()
     QStringList artists, albums;
     QStringList allArtists = m_dbManager->getAllArtists();
     artists = allArtists;
-    
     QStringList allAlbums = m_dbManager->getAllAlbums();
     albums = allAlbums;
     
@@ -1300,14 +1229,13 @@ void MainWindow::loadTracks()
     
     QString currentArtist = m_artistFilter->currentText();
     QString currentAlbum = m_albumFilter->currentText();
-    
     m_artistFilter->clear();
     m_artistFilter->addItem("Все исполнители");
     m_artistFilter->addItems(artists);
     if (artists.contains(currentArtist)) {
         m_artistFilter->setCurrentText(currentArtist);
     }
-    
+
     m_albumFilter->clear();
     m_albumFilter->addItem("Все альбомы");
     m_albumFilter->addItems(albums);
@@ -1328,7 +1256,6 @@ void MainWindow::applyFilters()
     QString searchText = m_searchEdit->text();
     QString artist = m_artistFilter->currentText();
     QString album = m_albumFilter->currentText();
-    
     QList<TrackInfo> tracks;
     
     if (!searchText.isEmpty()) {
@@ -1346,7 +1273,6 @@ void MainWindow::applyFilters()
             tracks = m_dbManager->getAllTracks();
         }
     }
-    
     m_playlistModel->setTracks(tracks);
 }
 
@@ -1364,7 +1290,6 @@ QString MainWindow::convertMp4ToMp3(const QString &mp4Path)
     QFileInfo fileInfo(mp4Path);
     QString outputDir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/Converted";
     QDir().mkpath(outputDir);
-    
     QString mp3Path = outputDir + "/" + fileInfo.baseName() + ".mp3";
     
     int counter = 1;
@@ -1375,7 +1300,6 @@ QString MainWindow::convertMp4ToMp3(const QString &mp4Path)
     }
     
     QString ffmpegPath = "ffmpeg";
-    
     QProcess process;
     QStringList arguments;
     arguments << "-i" << mp4Path
@@ -1387,7 +1311,6 @@ QString MainWindow::convertMp4ToMp3(const QString &mp4Path)
               << mp3Path;
     
     process.start(ffmpegPath, arguments);
-    
     if (!process.waitForFinished(300000)) {
         return QString();
     }
@@ -1396,7 +1319,6 @@ QString MainWindow::convertMp4ToMp3(const QString &mp4Path)
         QString errorOutput = process.readAllStandardError();
         return QString();
     }
-    
     if (QFileInfo::exists(mp3Path)) {
         return mp3Path;
     }

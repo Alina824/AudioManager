@@ -18,19 +18,16 @@ class AudioPlayer : public QObject
 public:
     explicit AudioPlayer(DatabaseManager *dbManager, QObject *parent = nullptr);
     ~AudioPlayer();
-
     void setTrack(const TrackInfo &track);
     void play();
     void pause();
     void stop();
     void setPosition(qint64 position);
     void setVolume(float volume);
-    
     QMediaPlayer::PlaybackState state() const;
     qint64 position() const;
     qint64 duration() const;
     float volume() const;
-    
     TrackInfo currentTrack() const { return m_currentTrack; }
     QAudioOutput* audioOutput() const { return m_audioOutput; }
 
@@ -55,7 +52,6 @@ private:
     TrackInfo m_currentTrack;
     bool m_trackLoaded;
     bool m_autoPlay;
-    
     void extractMetadata(const QUrl &url);
 };
 
